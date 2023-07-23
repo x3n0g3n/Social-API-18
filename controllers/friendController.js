@@ -1,10 +1,7 @@
 const { User } = require('../models');
 
 module.exports = {
-  /**
-   @param {Object} req - The request object.
-   @param {Object} res - The response object.
-   */
+ 
   addFriend(req, res) {
     
     const { userId, friendId } = req.params;
@@ -30,10 +27,7 @@ module.exports = {
       });
   },
 
-  /**
-    @param {Object} req - The request object.
-    @param {Object} res - The response object.
-   */
+  
   deleteFriend(req, res) {
     const { userId, friendId } = req.params;
 

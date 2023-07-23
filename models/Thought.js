@@ -1,75 +1,72 @@
-// initialize variables and import required module
 const mongoose = require('mongoose'),
       { Schema, Types } = mongoose;
 
-// create a new Mongoose schema
 const reactionSchema = new mongoose.Schema(
   {
     reactionBody: {
-      type: String, // type is a string
-      required: true, // reactionBody is required
-      maxlength: 280 // maximum length is 280 characters
+      type: String, 
+      required: true, 
+      maxlength: 280 
     },
     username: {
-      type: String, // type is a string
-      required: true // username is required
+      type: String, 
+      required: true 
     },
     createdAt: {
-      type: Date, // type is a date
-      default: Date.now, // default value is the current date
-      get: timestamp => new Date(timestamp).toISOString() // formats the timestamp into an ISO string when queried
+      type: Date, 
+      default: Date.now, 
+      get: timestamp => new Date(timestamp).toISOString() 
     }
   },
   {
-    id: false  // exclude the default "id" field from the document
+    id: false  
   }
 );
 
-// create a new Mongoose schema
 const thoughtSchema = new mongoose.Schema(
   {
     thoughtText: {
-      type: String, // type is a string
-      required: true, // thought text is required
-      minlength: 1, // minimum length is 1 character
-      maxlength: 280 // maximum length is 280 characters
+      type: String, 
+      required: true, 
+      minlength: 1,
+      maxlength: 280
     },
     createdAt: {
-      type: Date, // type is a date
-      default: Date.now, // default value is the current date
-      get: timestamp => new Date(timestamp).toISOString() // formats the timestamp into an ISO string when queried
+      type: Date,
+      default: Date.now, 
+      get: timestamp => new Date(timestamp).toISOString() 
     },
     username: {
-      type: String, // type is a string
-      required: true // userId is required
+      type: String, 
+      required: true 
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    reactions: [reactionSchema] // reactions field, an array of nested documents using reactionSchema
+    reactions: [reactionSchema] 
   },
   {
     toJSON: {
-      virtuals: true, // include virtual properties when converting the document to JSON
-      getters: true // apply getters, including virtual getters, when converting the document to JSON
+      virtuals: true, 
+      getters: true 
     },
-    id: false  // exclude the default "id" field from the document
+    id: false  
   }
 );
 
-// define a virtual property called "reactionCount" using a getter function
+
 thoughtSchema.virtual('reactionCount', {
   ref: 'Reaction',
   localField: '_id',
   foreignField: 'thoughtId',
-  justOne: false, // Set justOne to false to populate an array of reactions
+  justOne: false, 
   count: true
 });
 
-// create the Thought model using the thoughtSchema
+
 const Thought = mongoose.model('Thought', thoughtSchema);
 
-// export the Thought model
+
 module.exports = Thought;
